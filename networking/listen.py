@@ -27,7 +27,7 @@ class BroadcastPacketListener(QtCore.QObject):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             self.socket.bind(
-                (BROADCAST_ADDR, BROADCAST_PORT)
+                ('', BROADCAST_PORT)
             )
         except socket.error:
             port = BROADCAST_PORT
