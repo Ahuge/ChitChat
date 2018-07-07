@@ -1,6 +1,7 @@
 from Qt import QtWidgets, QtCore
 
 from ChitChat.networking.core import BroadcastServerCore
+from ChitChat.networking.utils import MessageType
 from ChitChat.gui.user_list import UserList
 from ChitChat.gui.chat import ChatTab
 
@@ -30,7 +31,7 @@ class Dialog(QtWidgets.QDialog):
 
     @QtCore.Slot(str, str, str)
     def _send_chat_message(self, user, host, message):
-        self.server.broadcaster.sendMessage(user, host, message)
+        self.server.broadcaster.sendMessage(message, message_type=MessageType.chat)
 
 
 if __name__ == "__main__":
