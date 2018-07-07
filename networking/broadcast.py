@@ -17,6 +17,7 @@ class PacketPoster(QtCore.QObject):
     def __init__(self, owner, addr=None, port=None, parent=None):
         super(PacketPoster, self).__init__(parent)
         self.owner = owner
+        self.hostname = socket.gethostname()
         self.addr = addr or self.DEFAULT_ADDR
         self.port = port or self.DEFAULT_PORT
         self.sock = None
@@ -42,7 +43,7 @@ class PacketPoster(QtCore.QObject):
         self.sock.setsockopt(*self._opts)
         formatted_message = self.prepareMessage(
             message=message, message_type=message_type
-        )
+        ).to_str()
 
         print("Sending message \"{msg}\"".format(msg=formatted_message))
         self.sock.send(formatted_message)
@@ -61,7 +62,7 @@ class BroadcastPacketPoster(PacketPoster):
     def broadcast(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         message = self.prepareMessage(message="")
-        self.sock.sendto(message, (self.addr, self.port))
+        self.sock.sendto(message.to_str(), (self.addr, self.port))
         self.sock.close()
         self.finished.emit()
 
