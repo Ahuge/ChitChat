@@ -40,7 +40,7 @@ class Message(object):
     def pad(msg, length):
         if length < len(msg):
             raise ValueError("Could not pad. Header is too long!")
-        return msg.rjust(length, Message.NULL_PAD)
+        return msg.ljust(length, Message.NULL_PAD)
 
     @classmethod
     def version_schema(cls):
@@ -77,13 +77,14 @@ class Message(object):
             header = msg[:Message.HEADER_LENGTH]
             message = msg[Message.HEADER_LENGTH:]
             header, _type, author = header.split(cls.HEADER_SEP, 2)
+            _type = int(_type)
 
             # May raise InvalidMessageVersionError
             Message._header_version_check(header)
             # May raise InvalidMessageFormatError
-            Message._type_check(header)
+            Message._type_check(_type)
 
-            author, _ = author.split(Message.NULL_PAD)
+            author, _ = author.split(Message.NULL_PAD, 1)
             user, hostname = author.split(cls.SEP, 1)
             return Message(
                 user=user,
@@ -92,6 +93,8 @@ class Message(object):
                 message=message
             )
         except ValueError:
+            import traceback
+            traceback.print_exc()
             raise InvalidMessageFormatError(
                 "Message \"{msg}\" is not a valid format.".format(msg=msg)
             )
