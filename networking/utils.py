@@ -50,7 +50,7 @@ class Message(object):
         author = self.SEP.join([self.user, self.hostname])
         version = self.version_schema()
         header = self.HEADER_SEP.join([
-                version, self.message_type, author
+                version, str(self.message_type), author
         ])
         return Message.pad(header, Message.HEADER_LENGTH) + self.message
 
