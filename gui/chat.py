@@ -23,7 +23,7 @@ class ChatWindow(QtWidgets.QWidget):
         self.layout().addWidget(self.input_widget)
 
     def sendText(self):
-        self.message_log_widget.addLine(self.input_widget.text())
+        self.message_log_widget.addLine(self.username, self.input_widget.text())
         self.messageSendRequest.emit(
             self.username,
             self.host,
